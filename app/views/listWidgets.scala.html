@@ -1,0 +1,68 @@
+@(widgets: Seq[ExchangeResultDTO], form: Form[ExchangeRateUserForm.Data], postUrl: Call)(implicit request: MessagesRequestHeader)
+
+@main("Widgets") {
+
+    <h1>Currency exchange rates</h1>
+
+    @* Flash shows updates to a page *@
+    @request.flash.data.map{ case (name, value) =>
+    <div>@name: @value</div>
+    }
+
+    <table>
+        <thead>
+            <tr><th>Input</th><th>Result</th>
+        </thead>
+        <tbody>
+        @for(w <- widgets) {
+            <tr><td>@w.amount @w.currencyFrom == </td><td>@w.price @w.currencyTo</td></tr>
+        }
+        </tbody>
+    </table>
+
+    <br>
+
+
+
+    <hr/>
+
+    @* Global errors are not tied to any particular form field *@
+    @if(form.hasGlobalErrors) {
+        @form.globalErrors.map { error: FormError =>
+            <div>
+                @error.key: @error.message
+            </div>
+        }
+    }
+
+    @helper.form(postUrl) {
+        @helper.CSRF.formField
+        @helper.select(
+            field = form("exchange to"),
+            options = Seq(
+                "EUR" -> "Euro",
+                "CAD" -> "Canadian Dollar",
+                "USD" -> "US Dollar",
+                "JPY" -> "Japanese yen",
+                "ILS" -> "Israeli Shekel",
+                "TRY" -> "TRY",
+                "RUB" -> "Russian Ruble"
+            ),
+            '_default -> "Choose currency")
+        @helper.select(
+            field = form("exchange from"),
+            options = Seq(
+                "EUR" -> "Euro",
+                "CAD" -> "Canadian Dollar",
+                "USD" -> "US Dollar",
+                "JPY" -> "Japanese yen",
+                "ILS" -> "Israeli Shekel",
+                "TRY" -> "TRY",
+                "RUB" -> "Russian Ruble"
+            ),
+            '_default -> "Choose currency")
+        @helper.inputText(form("Amount"))
+
+        <button>Calculate</button>
+    }
+}
