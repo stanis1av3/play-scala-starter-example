@@ -4,6 +4,7 @@ import java.sql.Timestamp
 import java.util.Date
 
 import javax.inject.{Inject, Singleton}
+import org.joda.time.{DateTime, ReadableDuration}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.basic.DatabasePublisher
 import slick.jdbc.JdbcProfile
@@ -57,16 +58,12 @@ class ExchangeResultRepository @Inject()(dbConfigProvider: DatabaseConfigProvide
     exchangeResult.result
   }
 
-  def findAllAsDP(): DatabasePublisher[ExchangeResult] = db.stream {
-    exchangeResult.result
-  }
-
-
-  def findByCurrencyPairActual(currencyPair: (String, String), dateFrom: Timestamp): Future[Seq[ExchangeResult]] = db.run {
+  def findByCurrencyPairActual(currencyPair: (String, String), recordAge: ReadableDuration): Future[Seq[ExchangeResult]] = db.run {
     exchangeResult
-      //.filter(_.createdDate<new Timestamp(new Date().getTime))
+      .filter(_.createdDate>new Timestamp(DateTime.now().minus(recordAge).getMillis))
       .filter(_.currencyTo===currencyPair._2)
       .filter(_.currencyFrom===currencyPair._1)
+      .sortBy(_.createdDate.desc)
       .result
   }
 }

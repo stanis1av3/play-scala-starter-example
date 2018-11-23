@@ -5,13 +5,13 @@ import models.ExchangeResultDTO
 import play.api.data._
 import play.api.libs.json.Json
 import play.api.mvc._
-import services.ExchangeRateServiceImpl
+import services.ExchangeResultService
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext}
 
 class ExchangeRateController @Inject()(messageControllerComponents: MessagesControllerComponents,
-                                       exchangeRateService: ExchangeRateServiceImpl) extends MessagesAbstractController(messageControllerComponents) {
+                                       exchangeRateService: ExchangeResultService) extends MessagesAbstractController(messageControllerComponents) {
 
   implicit val ec = ExecutionContext.global
 
