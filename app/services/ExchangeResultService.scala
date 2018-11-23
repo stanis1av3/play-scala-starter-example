@@ -21,8 +21,6 @@ class ExchangeResultService @Inject()(ws: WSClient,
   val complexRequest: WSRequest = ws.url(URL).addHttpHeaders("Accept" -> "application/json")
 
   def calculateRates(resultDTO: ExchangeResultDTO): Future[Double] = {
-    println("CACHE TTL = " + CACHE_TTL)
-    resultRepository.findAll().map(e => println(e))
     resultRepository.findByCurrencyPairActual((resultDTO.currencyTo, resultDTO.currencyFrom), CACHE_TTL)
       .map(f => f.head.rate * resultDTO.price)
       .recoverWith {
@@ -40,8 +38,8 @@ class ExchangeResultService @Inject()(ws: WSClient,
   }
 
   def getActualRates: Future[ExchangeRatesDTO] = {
-    complexRequest.get()
-      .map(response => response.json.validate[ExchangeRatesDTO]
+    complexRequest.get().map(response =>
+      response.json.validate[ExchangeRatesDTO]
         .getOrElse(throw new IllegalArgumentException("Response can't be casted")))
   }
 }
