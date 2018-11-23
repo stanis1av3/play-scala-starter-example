@@ -1,16 +1,12 @@
 package repositories
 
 import java.sql.Timestamp
-import java.util.Date
-
 import javax.inject.{Inject, Singleton}
 import org.joda.time.{DateTime, ReadableDuration}
 import play.api.db.slick.DatabaseConfigProvider
-import slick.basic.DatabasePublisher
 import slick.jdbc.JdbcProfile
 
-import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ExchangeResultRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {

@@ -1,9 +1,7 @@
 package repositories
 
-
 import java.sql.Timestamp
 import java.util.Date
-
 import models.ExchangeResultDTO
 
 case class ExchangeResult(
@@ -13,7 +11,6 @@ case class ExchangeResult(
                            amount: Double,
                            rate: Double,
                            createdDate: Timestamp) {
-
 }
 
 object ExchangeResult {
@@ -25,5 +22,5 @@ object ExchangeResult {
     erd.price,
     rate,
     new Timestamp(new Date().getTime)
-    )
+  )
 }

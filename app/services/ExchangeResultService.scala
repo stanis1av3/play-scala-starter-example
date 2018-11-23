@@ -8,14 +8,12 @@ import play.api.libs.ws._
 import repositories.{ExchangeResult, ExchangeResultRepository}
 
 import scala.collection.GenSet
-import scala.concurrent.{ExecutionContext, ExecutionContextExecutor, Future}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ExchangeResultService @Inject()(ws: WSClient,
                                       resultRepository: ExchangeResultRepository,
-                                      config: Config) {
-
-  implicit val ec: ExecutionContextExecutor = ExecutionContext.global
+                                      config: Config)(implicit val ec: ExecutionContext) {
 
   val URL = config.getString("rate.source.url")
   val CACHE_TTL = new Duration(config.getLong("cache.ttl.ms"))

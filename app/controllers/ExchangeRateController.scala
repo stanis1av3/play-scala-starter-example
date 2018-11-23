@@ -36,7 +36,7 @@ class ExchangeRateController @Inject()(messageControllerComponents: MessagesCont
 
     val successFunction = { data: Data =>
 
-      val widget = ExchangeResultDTO(currencyTo = data.exchangeTo, currencyFrom=data.exchangeFrom, price = data.price)
+      val widget = ExchangeResultDTO(currencyTo = data.exchangeTo, currencyFrom=data.exchangeFrom, price = data.price, 0)
       Await.ready(
         exchangeRateService.calculateRates(widget)
           .map(f => widgets.append(ExchangeResultDTO(widget.currencyTo, widget.currencyFrom, f, widget.price))), Duration.Inf)
@@ -56,7 +56,7 @@ class ExchangeRateController @Inject()(messageControllerComponents: MessagesCont
   //:/rates/CUR1/CUR2/AMNT
   def getCalculatedRateAmount(currencyFrom: String, currencyTo: String, amount: Double) = Action.async {
     implicit result =>
-      exchangeRateService.calculateRates(ExchangeResultDTO(currencyTo, currencyFrom, amount))
+      exchangeRateService.calculateRates(ExchangeResultDTO(currencyTo, currencyFrom, amount, 0))
         .map(o => Ok(Json.toJson(o)))
   }
 }
