@@ -7,4 +7,8 @@ package models
   * which are used for reads, distinct from the form processing DTO,
   * which are used for writes.
   */
-case class ExchangeResultDTO(currencyTo: String, currencyFrom: String, price: Double, amount: Double = 0)
+case class ExchangeResultDTO(
+                              currencyTo: String,
+                              currencyFrom: String,
+                              price: Double,
+                              amount: Double = 0)
