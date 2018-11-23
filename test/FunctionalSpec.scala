@@ -22,24 +22,23 @@ class FunctionalSpec extends PlaySpec with GuiceOneAppPerSuite {
 
   }
 
-  "HomeController" should {
+  "ExchangeRateController" should {
 
     "render the index page" in {
       val home = route(app, FakeRequest(GET, "/")).get
 
       status(home) mustBe Status.OK
       contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("Your new application is ready.")
+      contentAsString(home) must include ("Please go to")
     }
 
   }
 
-  "CountController" should {
+  "ExchangeRateController" should {
 
     "return an increasing count" in {
-      contentAsString(route(app, FakeRequest(GET, "/count")).get) mustBe "0"
-      contentAsString(route(app, FakeRequest(GET, "/count")).get) mustBe "1"
-      contentAsString(route(app, FakeRequest(GET, "/count")).get) mustBe "2"
+      contentAsString(route(app, FakeRequest(GET, "/rates/EUR/EUR/1")).get) mustBe "1"
+      contentAsString(route(app, FakeRequest(GET, "/rates/USD/USD/2000")).get) mustBe "2000"
     }
 
   }
