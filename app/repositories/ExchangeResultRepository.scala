@@ -1,7 +1,9 @@
 package repositories
 
 import java.sql.Timestamp
+
 import javax.inject.{Inject, Singleton}
+import models.entities.ExchangeResult
 import org.joda.time.{DateTime, ReadableDuration}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile

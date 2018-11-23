@@ -1,7 +1,8 @@
-package repositories
+package models.entities
 
 import java.sql.Timestamp
 import java.util.Date
+
 import models.ExchangeResultDTO
 
 case class ExchangeResult(
@@ -10,8 +11,8 @@ case class ExchangeResult(
                            currencyFrom: String,
                            amount: Double,
                            rate: Double,
-                           createdDate: Timestamp) {
-}
+                           createdDate: Timestamp
+                         )
 
 object ExchangeResult {
 

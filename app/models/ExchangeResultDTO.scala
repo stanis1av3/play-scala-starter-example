@@ -11,4 +11,5 @@ case class ExchangeResultDTO(
                               currencyTo: String,
                               currencyFrom: String,
                               price: Double,
-                              amount: Double)
+                              amount: Double
+                            )

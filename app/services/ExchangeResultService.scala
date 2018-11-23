@@ -1,11 +1,12 @@
 package services
 
 import com.typesafe.config.Config
-import javax.inject._
+import models.entities.ExchangeResult
 import models.{ExchangeRatesDTO, ExchangeResultDTO}
+import javax.inject._
 import org.joda.time.Duration
 import play.api.libs.ws._
-import repositories.{ExchangeResult, ExchangeResultRepository}
+import repositories.ExchangeResultRepository
 
 import scala.collection.GenSet
 import scala.concurrent.{ExecutionContext, Future}

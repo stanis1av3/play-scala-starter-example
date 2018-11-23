@@ -1,8 +1,8 @@
 package controllers
 
 import controllers.ExchangeRateUserForm.Data
-import javax.inject.Inject
 import models.ExchangeResultDTO
+import javax.inject.Inject
 import play.api.data._
 import play.api.libs.json.Json
 import play.api.mvc._
