@@ -47,7 +47,8 @@ class ExchangeResultRepository @Inject()(dbConfigProvider: DatabaseConfigProvide
   def save(currencyTo: String, currencyFrom: String, amount: Double, rate: Double, createdDate: Timestamp): Future[ExchangeResult] = db.run {
 
     (exchangeResult.map(p => (p.currencyTo, p.currencyFrom, p.amount, p.rate, p.createdDate))
-      returning exchangeResult.map(_.id)
+      returning
+      exchangeResult.map(_.id)
       into ((data, id) => ExchangeResult(id, data._1, data._2, data._3, data._4, data._5))
       += (currencyFrom, currencyTo, amount, rate, createdDate))
   }
