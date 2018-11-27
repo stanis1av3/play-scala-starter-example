@@ -27,7 +27,7 @@ class ExchangeResultService @Inject()(ws: WSClient,
 
     calculateRatesFromInternalSource(resultDTO)
       .recoverWith {
-        case uoe: UnsupportedOperationException => calculateRatesFromExternalSource(resultDTO)
+        case _: UnsupportedOperationException => calculateRatesFromExternalSource(resultDTO)
         case e: Exception => throw e
       }
   }
