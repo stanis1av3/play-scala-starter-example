@@ -19,7 +19,7 @@ class ExchangeResultRepository @Inject()(dbConfigProvider: DatabaseConfigProvide
 
   private class ExchangeResultTable(tag: Tag) extends Table[ExchangeResult](tag, "exchange_result") {
 
-    def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
+    def id = column[Option[Long]]("id", O.PrimaryKey, O.AutoInc)
 
     def currencyTo = column[String]("currency_to")
 
