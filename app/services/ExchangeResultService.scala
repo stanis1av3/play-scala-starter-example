@@ -1,5 +1,7 @@
 package services
 
+import java.util.NoSuchElementException
+
 import com.typesafe.config.Config
 import models.entities.ExchangeResult
 import models.{ExchangeRatesDTO, ExchangeResultDTO}
@@ -25,17 +27,23 @@ class ExchangeResultService @Inject()(ws: WSClient,
     resultRepository.findByCurrencyPairActual((resultDTO.currencyTo, resultDTO.currencyFrom), CACHE_TTL)
       .map(f => f.head.rate * resultDTO.price)
       .recoverWith {
-        case _: Exception => getActualRates
-          .filter(erd => GenSet(resultDTO.currencyFrom, resultDTO.currencyTo).subsetOf(erd.rates.keySet + erd.base))
-          .map(exchangeRatesDTO =>
-            (exchangeRatesDTO.rates.getOrElse(resultDTO.currencyTo.toUpperCase, 1.0),
-              exchangeRatesDTO.rates.getOrElse(resultDTO.currencyFrom.toUpperCase, 1.0)))
-          .map(f => f._1 / f._2)
-          .map(res => {
-            resultRepository.save(ExchangeResult.of(resultDTO, res))
-            res * resultDTO.price
-          })
+        case uoe: UnsupportedOperationException => calculateRatesFromExternalSource(resultDTO)
+        case e: Exception => throw e
       }
+  }
+
+
+  def calculateRatesFromExternalSource(resultDTO: ExchangeResultDTO): Future[Double] = {
+    getActualRates
+      .filter(erd => GenSet(resultDTO.currencyFrom, resultDTO.currencyTo).subsetOf(erd.rates.keySet + erd.base))
+      .map(exchangeRatesDTO =>
+        (exchangeRatesDTO.rates.getOrElse(resultDTO.currencyTo.toUpperCase, 1.0),
+          exchangeRatesDTO.rates.getOrElse(resultDTO.currencyFrom.toUpperCase, 1.0)))
+      .map(f => f._1 / f._2)
+      .map(res => {
+        resultRepository.save(ExchangeResult.of(resultDTO, res))
+        res * resultDTO.price
+      })
   }
 
   def getActualRates: Future[ExchangeRatesDTO] = {
