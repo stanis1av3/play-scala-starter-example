@@ -6,7 +6,7 @@ import java.util.Date
 import models.ExchangeResultDTO
 
 case class ExchangeResult(
-                           id: Long,
+                           id: Option[Long],
                            currencyTo: String,
                            currencyFrom: String,
                            amount: Double,
@@ -17,7 +17,7 @@ case class ExchangeResult(
 object ExchangeResult {
 
   def of(erd: ExchangeResultDTO, rate: Double): ExchangeResult = new ExchangeResult(
-    0,
+    None,
     erd.currencyTo,
     erd.currencyFrom,
     erd.price,
