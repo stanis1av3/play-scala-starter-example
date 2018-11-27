@@ -24,14 +24,18 @@ class ExchangeResultService @Inject()(ws: WSClient,
   val complexRequest: WSRequest = ws.url(URL).addHttpHeaders("Accept" -> "application/json")
 
   def calculateRates(resultDTO: ExchangeResultDTO): Future[Double] = {
-    resultRepository.findByCurrencyPairActual((resultDTO.currencyTo, resultDTO.currencyFrom), CACHE_TTL)
-      .map(f => f.head.rate * resultDTO.price)
+
+    calculateRatesFromInternalSource(resultDTO)
       .recoverWith {
         case uoe: UnsupportedOperationException => calculateRatesFromExternalSource(resultDTO)
         case e: Exception => throw e
       }
   }
 
+  def calculateRatesFromInternalSource(resultDTO: ExchangeResultDTO): Future[Double] = {
+    resultRepository.findByCurrencyPairActual((resultDTO.currencyTo, resultDTO.currencyFrom), CACHE_TTL)
+      .map(f => f.head.rate * resultDTO.price)
+  }
 
   def calculateRatesFromExternalSource(resultDTO: ExchangeResultDTO): Future[Double] = {
     getActualRates
