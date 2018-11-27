@@ -21,8 +21,6 @@ class ExchangeResultService @Inject()(ws: WSClient,
   val URL = config.getString("rate.source.url")
   val CACHE_TTL = new Duration(config.getLong("cache.ttl.ms"))
 
-  val complexRequest: WSRequest = ws.url(URL).addHttpHeaders("Accept" -> "application/json")
-
   def calculateRates(resultDTO: ExchangeResultDTO): Future[Double] = {
 
     calculateRatesFromInternalSource(resultDTO)
@@ -50,7 +48,8 @@ class ExchangeResultService @Inject()(ws: WSClient,
       })
   }
 
-  def getActualRates: Future[ExchangeRatesDTO] = {
+  def getActualRates(implicit sourceUrl:String = URL): Future[ExchangeRatesDTO] = {
+    val complexRequest: WSRequest = ws.url(sourceUrl).addHttpHeaders("Accept" -> "application/json")
     complexRequest.get().map(response =>
       response.json.validate[ExchangeRatesDTO]
         .getOrElse(throw new IllegalArgumentException("Response can't be casted")))
