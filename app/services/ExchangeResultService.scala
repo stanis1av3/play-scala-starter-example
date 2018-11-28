@@ -1,11 +1,8 @@
 package services
 
-import java.util.NoSuchElementException
-
 import com.typesafe.config.Config
-import models.entities.ExchangeResult
-import models.{ExchangeRatesDTO, ExchangeResultDTO}
 import javax.inject._
+import models.{ExchangeRatesDTO, ExchangeResultDTO}
 import org.joda.time.Duration
 import play.api.libs.ws._
 import repositories.ExchangeResultRepository
@@ -43,7 +40,7 @@ class ExchangeResultService @Inject()(ws: WSClient,
           exchangeRatesDTO.rates.getOrElse(resultDTO.currencyFrom.toUpperCase, 1.0)))
       .map(f => f._1 / f._2)
       .map(res => {
-        resultRepository.save(ExchangeResult.of(resultDTO, res))
+        resultRepository.save(resultDTO -> res)
         res * resultDTO.price
       })
   }

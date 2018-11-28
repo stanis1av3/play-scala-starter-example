@@ -16,12 +16,12 @@ case class ExchangeResult(
 
 object ExchangeResult {
 
-  def of(erd: ExchangeResultDTO, rate: Double): ExchangeResult = new ExchangeResult(
+  implicit def of(erd: (ExchangeResultDTO, Double)): ExchangeResult = new ExchangeResult(
     None,
-    erd.currencyTo,
-    erd.currencyFrom,
-    erd.price,
-    rate,
+    erd._1.currencyTo,
+    erd._1.currencyFrom,
+    erd._1.price,
+    erd._2,
     new Timestamp(new Date().getTime)
   )
 }
